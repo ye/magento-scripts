@@ -60,10 +60,10 @@ WHERE attr.attribute_id IN (%s) AND attr.entity_id in (%s)
     attributes = {}
     for attr in attribute_values:
         eid = attr.pop('entity_id')
-        attributes[eid] = attributes.get(eid, [])
+        attributes[eid] = attributes.get(eid, {})
         aid = attr.pop('attribute_id')
         val = attr.pop('value')
-        attributes[eid].append({mappings[aid]: val})
+        attributes[eid][mappings[aid]] = val
     return attributes
 
 
@@ -79,7 +79,7 @@ def get_addresses(cur, customer_ids):
 if '__main__' == __name__:
     out = None
     parser = argparse.ArgumentParser()
-    parser.add_argument('--json', '-j', help='Output in JSON format')
+    parser.add_argument('--json', '-j', action='store_true', help='Output in JSON format')
     parser.add_argument('customer_ids', help='List of Customer Account Numbers')
 
     args = parser.parse_args()
